@@ -27,14 +27,14 @@ class Pacientes{
 }
 
 const cupo1=new Cupos("Opcion 1", 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "10:00", 20, "Disponible", null)
-const cupo2=new Cupos("Opcion 2", 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "10:20", 20, "Disponible", null)
+const cupo2=new Cupos("Opcion 2", 19283746, "Dr. Pato Lucas", "Medicina General", "03/05/2022", "10:20", 20, "Disponible", null)
 const cupo3=new Cupos("Opcion 3", 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "10:40", 20, "Disponible", null)
-const cupo4=new Cupos("Opcion 4", 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "11:00", 20, "Disponible", null)
+const cupo4=new Cupos("Opcion 4", 19283746, "Dr. Pato Lucas", "Medicina General", "03/05/2022", "11:00", 20, "Disponible", null)
 const cupo5=new Cupos("Opcion 5", 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "11:20", 20, "Disponible", null)
 const cupo6=new Cupos("Opcion 1", 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "11:40", 20, "Disponible", null)
-const cupo7=new Cupos("Opcion 2", 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "12:00", 20, "Disponible", null)
+const cupo7=new Cupos("Opcion 2", 91827364, "Dr. Bugs Bunny", "Pediatría", "03/05/2022", "12:00", 20, "Disponible", null)
 const cupo8=new Cupos("Opcion 3", 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "12:20", 20, "Disponible", null)
-const cupo9=new Cupos("Opcion 4", 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "12:40", 20, "Disponible", null)
+const cupo9=new Cupos("Opcion 4", 91827364, "Dr. Bugs Bunny", "Pediatría", "03/05/2022", "12:40", 20, "Disponible", null)
 const cupo10=new Cupos("Opcion 5", 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "13:00", 20, "Disponible", null)
 
 let agenda=[cupo1, cupo2, cupo3, cupo4, cupo5, cupo6, cupo7, cupo8, cupo9, cupo10]
@@ -51,14 +51,15 @@ function elegirOpcion(){
 }
 
 function dispoMedGen(){
-    agenda.forEach(item => {
-        if(item.especialidad == "Medicina General" && item.estado == "Disponible"){
-            console.log(`${item.opcion} - ${item.nombre} - ${item.especialidad} - ${item.fecha} - ${item.hora}`)
-        }
+    console.log("Los cupos de Medicina General son:")
+    let arreglo=(agenda.filter(doctores => doctores.especialidad == "Medicina General" && doctores.estado == "Disponible"))
+    arreglo.forEach(item => {
+        console.log(`${item.opcion} - ${item.nombre} - ${item.especialidad} - ${item.fecha} - ${item.hora}`)
     })
 }
 
 function dispoPediatria(){
+    console.log("Los cupos de Pediatría son:")
     agenda.forEach(item => {
         if(item.especialidad == "Pediatría" && item.estado == "Disponible"){
             console.log(`${item.opcion} - ${item.nombre} - ${item.especialidad} - ${item.fecha} - ${item.hora}`)
