@@ -23,6 +23,8 @@ class Pacientes{
         this.dni=dni
         this.nombre=nombre
         this.edad=edad
+        this.sexo=sexo
+        this.email=email
     }
 }
 
@@ -31,37 +33,68 @@ const cupo2=new Cupos(2, 19283746, "Dr. Pato Lucas", "Medicina General", "03/05/
 const cupo3=new Cupos(3, 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "10:40", 20, "Disponible", null)
 const cupo4=new Cupos(4, 19283746, "Dr. Pato Lucas", "Medicina General", "03/05/2022", "11:00", 20, "Disponible", null)
 const cupo5=new Cupos(5, 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "11:20", 20, "Disponible", null)
-const cupo6=new Cupos(1, 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "11:40", 20, "Disponible", null)
-const cupo7=new Cupos(2, 91827364, "Dr. Bugs Bunny", "Pediatría", "03/05/2022", "12:00", 20, "Disponible", null)
-const cupo8=new Cupos(3, 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "12:20", 20, "Disponible", null)
-const cupo9=new Cupos(4, 91827364, "Dr. Bugs Bunny", "Pediatría", "03/05/2022", "12:40", 20, "Disponible", null)
-const cupo10=new Cupos(5, 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "13:00", 20, "Disponible", null)
+const cupo6=new Cupos(6, 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "11:40", 20, "Disponible", null)
+const cupo7=new Cupos(7, 91827364, "Dr. Bugs Bunny", "Pediatría", "03/05/2022", "12:00", 20, "Disponible", null)
+const cupo8=new Cupos(8, 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "12:20", 20, "Disponible", null)
+const cupo9=new Cupos(9, 91827364, "Dr. Bugs Bunny", "Pediatría", "03/05/2022", "12:40", 20, "Disponible", null)
+const cupo10=new Cupos(10, 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "13:00", 20, "Disponible", null)
 
 let agenda=[cupo1, cupo2, cupo3, cupo4, cupo5, cupo6, cupo7, cupo8, cupo9, cupo10]
+
+//Para este caso se utilizará LocalStorage como reemplazo de una base de datos
+let arrayPacienteStorage = JSON.parse(localStorage.getItem('pacienteStorage')) ?? []
+let arrayAgendaStorage = JSON.parse(localStorage.getItem('agendaStorage')) ?? [...agenda]
 
 let dni
 let nombre
 let edad
-let continua = true
-while(continua){
-    continua = false
-    dni = parseInt(prompt("Ingresa tu DNI"))
-    nombre = prompt("Ingresa tu nombre")
-    edad = parseInt(prompt("Ingresa tu edad"))
+let sexo
+let email
+let btnBuscarPaciente = document.getElementById('btnBuscarPaciente')
+btnBuscarPaciente.addEventListener('click', (event) => {
+    event.preventDefault()
+    dni=parseInt(document.getElementById("textDni").value)
     if(isNaN(dni)){
-        alert("Ingresa un DNI válido")
-        continua = true
+        let datosPaciente = document.getElementById('datosPaciente')
+        alert("DNI inválido")
+        location.reload()
+    }else{
+        (arrayPacienteStorage.find(persona => persona.dni == dni)) ? verDatosPaciente(dni) : formNuevoPaciente(dni)
     }
-    if(nombre == ""){
-        alert("Ingresa tu nombre")
-        continua = true
-    }
-    if(isNaN(edad)){
-        alert("Ingresa tu edad")
-        continua = true
-    }
+})
+
+function formNuevoPaciente(dni){
+    let datosPaciente = document.getElementById('datosPaciente')
+    datosPaciente.innerHTML = `
+        <label>Ingresa tu nombre:</label>
+        <input type="text" id="textNombre">
+        <label>Ingresa tu edad:</label>
+        <input type="text" id="textEdad">
+        <label>Ingresa tu sexo:</label>
+        <input type="text" id="textSexo">
+        <label>Ingresa tu e-mail:</label>
+        <input type="text" id="textEmail">
+        <button id="btnCrearPaciente">Crear Paciente</button>
+    `
+    let btnCrearPaciente = document.getElementById('btnCrearPaciente')
+    btnCrearPaciente.addEventListener('click', (event) => {
+        event.preventDefault()
+        crearPaciente(dni)
+    })
 }
-const paciente=new Pacientes(dni, nombre, edad)
+
+let paciente
+function crearPaciente(dni){
+    nombre=document.getElementById("textNombre").value
+    edad=parseInt(document.getElementById("textEdad").value)
+    sexo=document.getElementById("textSexo").value
+    email=document.getElementById("textEmail").value
+    //agregar validador de datos
+    paciente=new Pacientes(dni, nombre, edad, sexo, email)
+    arrayPacienteStorage.push(paciente)
+    localStorage.setItem('pacienteStorage', JSON.stringify(arrayPacienteStorage))
+    dispo(edad)
+}
 
 let especialidad
 let arreglo
@@ -71,56 +104,61 @@ function dispo(edadPac){
     }else{
         especialidad = "Pediatría"
     }
-    let divAgenda = document.getElementById('divAgenda')
+    let datosPaciente = document.getElementById('datosPaciente')
+    datosPaciente.innerHTML = ``
+    let divAgenda = document.querySelector('#divAgenda')
     divAgenda.innerHTML += `<p>Los cupos disponibles son:</p>`
-    arreglo=(agenda.filter(doctores => doctores.especialidad == especialidad && doctores.estado == "Disponible"))
-    arreglo.forEach(item => {
-        divAgenda.innerHTML += `
-            <div id="cupo${item.opcion}" class="agendaClass">
-                <p>Opción: ${item.opcion}</p>
-                <p>Nombre: ${item.nombre}</p>
-                <p>Especialidad: ${item.especialidad}</p>
-                <p>Fecha: ${item.fecha}</p>
-                <p>Hora: ${item.hora}</p>
-            </div>
-        `
-    })
-    let divBoton = document.getElementById('divBoton')
-    divBoton.innerHTML = `<button id="btnOpcion">Elegir Opciones</button>`
-    divBoton.onclick = () => {elegirOpcion()}
-}
-
-dispo(paciente.edad)
-
-let opcion
-function elegirOpcion(){
-    do {
-        opcion=parseInt(prompt("Elije una opción:"))
-        if(isNaN(opcion)){
-            alert("Ingrese un número válido")
-        }
-    } while (isNaN(opcion));
-    crear()
-}
-
-let x = 1
-function crear(){
-    agenda.forEach(item => {
-        if(item.opcion == opcion && item.estado == "Disponible" && item.especialidad == especialidad){
-            item.crearCita(paciente.dni)
-            x = 0
+    arrayAgendaStorage.forEach((item, indice) => {
+        if(item.especialidad == especialidad && item.estado == "Disponible"){
+            divAgenda.innerHTML += `
+                <div id="cupo${indice}" class="agendaClass">
+                    <p>Nombre: ${item.nombre}</p>
+                    <p>Especialidad: ${item.especialidad}</p>
+                    <p>Fecha: ${item.fecha}</p>
+                    <p>Hora: ${item.hora}</p>
+                    <button id="boton${indice}">Reservar</button>
+                </div>
+            `
         }
     })
-    if (x == 0){
-        mostrarDetalle()
-    }
+    divAgenda.innerHTML += `<button id="btnNvaReserva">Nueva Reserva</button>`
+
+    let btnNvaReserva = document.getElementById('btnNvaReserva')
+    btnNvaReserva.addEventListener('click', (event) => {
+        location.reload()
+    })
+    arrayAgendaStorage.forEach((item, indice) => {
+        if(item.especialidad == especialidad && item.estado == "Disponible"){
+            document.querySelector(`#boton${indice}`).addEventListener('click', () => {
+                //arrayAgendaStorage[indice].crearCita(dni)
+                arrayAgendaStorage[indice].estado="Ocupado"
+                arrayAgendaStorage[indice].dniPaciente=dni
+                localStorage.setItem('agendaStorage', JSON.stringify(arrayAgendaStorage))
+                mostrarDetalle()
+            })
+        }
+    })
 }
+
+function verDatosPaciente(dni){
+    let divAgenda = document.getElementById('divAgenda')
+    arrayPacienteStorage.forEach(item => {
+        if(item.dni == dni){
+            divAgenda.innerHTML = `<p>Hola ${item.nombre}, bienvenido</p>`
+            edad=item.edad
+            nombre=item.nombre
+        }
+    })
+    dispo(edad)
+} 
 
 function mostrarDetalle(){
-    let divDetalleCita = document.getElementById('divDetalleCita')
-    divDetalleCita.innerHTML += `<p>Hola ${paciente.nombre}, los detalles de tu cita son:</p>`
-    agenda.forEach(item => {
-        if(item.dniPaciente == paciente.dni){
+    let datosPaciente = document.getElementById('datosPaciente')
+    datosPaciente.innerHTML = ``
+    let divDetalleCita = document.getElementById('divAgenda')
+    divDetalleCita.innerHTML = `<p>${nombre}, los detalles de tu(s) cita(s) son:</p>`
+    arrayAgendaStorage.forEach(item => {
+        if(item.dniPaciente == dni){
             divDetalleCita.innerHTML += `
                 <div id="cita${item.opcion}" class="citaClass">
                     <p>Profesional: ${item.nombre}</p>
@@ -132,5 +170,11 @@ function mostrarDetalle(){
                 </div>
             `
         }
+    })
+    divDetalleCita.innerHTML += `<button id="btnNvaReserva">Nueva Reserva</button>`
+
+    let btnNvaReserva = document.getElementById('btnNvaReserva')
+    btnNvaReserva.addEventListener('click', (event) => {
+        location.reload()
     })
 }
