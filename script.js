@@ -55,9 +55,11 @@ btnBuscarPaciente.addEventListener('click', (event) => {
     event.preventDefault()
     dni=parseInt(document.getElementById("textDni").value)
     if(isNaN(dni)){
-        let datosPaciente = document.getElementById('datosPaciente')
-        alert("DNI inválido")
-        location.reload()
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'DNI inválido!',
+        })
     }else{
         (arrayPacienteStorage.find(persona => persona.dni == dni)) ? verDatosPaciente(dni) : formNuevoPaciente(dni)
     }
@@ -67,13 +69,13 @@ function formNuevoPaciente(dni){
     let datosPaciente = document.getElementById('datosPaciente')
     datosPaciente.innerHTML = `
         <label>Ingresa tu nombre:</label>
-        <input type="text" id="textNombre">
+        <input type="text" id="textNombre"><br>
         <label>Ingresa tu edad:</label>
-        <input type="text" id="textEdad">
+        <input type="text" id="textEdad"><br>
         <label>Ingresa tu sexo:</label>
-        <input type="text" id="textSexo">
+        <input type="text" id="textSexo"><br>
         <label>Ingresa tu e-mail:</label>
-        <input type="text" id="textEmail">
+        <input type="text" id="textEmail"><br>
         <button id="btnCrearPaciente">Crear Paciente</button>
     `
     let btnCrearPaciente = document.getElementById('btnCrearPaciente')
@@ -111,17 +113,21 @@ function dispo(edadPac){
     arrayAgendaStorage.forEach((item, indice) => {
         if(item.especialidad == especialidad && item.estado == "Disponible"){
             divAgenda.innerHTML += `
-                <div id="cupo${indice}" class="agendaClass">
+            <div id="cupo${indice}" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-body">
                     <p>Nombre: ${item.nombre}</p>
                     <p>Especialidad: ${item.especialidad}</p>
                     <p>Fecha: ${item.fecha}</p>
                     <p>Hora: ${item.hora}</p>
                     <button id="boton${indice}">Reservar</button>
                 </div>
+            </div>
             `
         }
     })
-    divAgenda.innerHTML += `<button id="btnNvaReserva">Nueva Reserva</button>`
+
+    let boton = document.getElementById('boton')
+    boton.innerHTML = `<button id="btnNvaReserva">Nueva Reserva</button>`
 
     let btnNvaReserva = document.getElementById('btnNvaReserva')
     btnNvaReserva.addEventListener('click', (event) => {
@@ -160,7 +166,8 @@ function mostrarDetalle(){
     arrayAgendaStorage.forEach(item => {
         if(item.dniPaciente == dni){
             divDetalleCita.innerHTML += `
-                <div id="cita${item.opcion}" class="citaClass">
+            <div id="cita${item.opcion}" class="card border-primary mb-3" style="max-width: 20rem;">
+                <div class="card-body">
                     <p>Profesional: ${item.nombre}</p>
                     <p>Especialidad: ${item.especialidad}</p>
                     <p>Fecha: ${item.fecha}</p>
@@ -168,10 +175,12 @@ function mostrarDetalle(){
                     <p>Estado: ${item.estado}</p>
                     <p>DNI Paciente: ${item.dniPaciente}</p>
                 </div>
+            </div>
             `
         }
     })
-    divDetalleCita.innerHTML += `<button id="btnNvaReserva">Nueva Reserva</button>`
+    let boton = document.getElementById('boton')
+    boton.innerHTML = `<button id="btnNvaReserva">Nueva Reserva</button>`
 
     let btnNvaReserva = document.getElementById('btnNvaReserva')
     btnNvaReserva.addEventListener('click', (event) => {

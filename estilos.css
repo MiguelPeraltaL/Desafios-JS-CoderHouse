@@ -1,7 +1,8 @@
-.agendaClass{
-    background-color: lightcoral;
+body{
+    background-color: white !important;
 }
-
-.citaClass{
-    background-color: greenyellow;
+.center {
+    max-width: 1080px;
+    width: 100%;
+    margin: 0 auto;
 }

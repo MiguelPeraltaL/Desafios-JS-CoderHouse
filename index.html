@@ -5,15 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://bootswatch.com/5/morph/bootstrap.min.css">
     <title>Desafios</title>
 </head>
-<body>
+<body class="center">
     <div id="datosPaciente">
         <label>Ingresa tu DNI:</label>
-        <input type="text" id="textDni">
+        <input type="text" placeholder="Ingresa tu DNI" id="textDni">
         <button id="btnBuscarPaciente">Buscar</button>
     </div>
-    <div id="divAgenda"></div>
+    <div id="divAgenda" class="row"></div>
+    <div id="boton"></div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.15/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="script.js"></script>
 </body>
 </html>
