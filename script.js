@@ -1,23 +1,5 @@
 //Agenda Web
 
-class Cupos{
-    constructor(opcion, dniMedico, nombre, especialidad, fecha, hora, duracion, estado, dniPaciente){
-        this.opcion=opcion
-        this.dniMedico=dniMedico
-        this.nombre=nombre
-        this.especialidad=especialidad
-        this.fecha=fecha
-        this.hora=hora
-        this.duracion=duracion
-        this.estado=estado
-        this.dniPaciente=dniPaciente
-    }
-    crearCita(dniPac){
-        this.estado="Ocupado"
-        this.dniPaciente=dniPac
-    }
-}
-
 class Pacientes{
     constructor(dni, nombre, edad, sexo, email){
         this.dni=dni
@@ -28,22 +10,19 @@ class Pacientes{
     }
 }
 
-const cupo1=new Cupos(1, 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "10:00", 20, "Disponible", null)
-const cupo2=new Cupos(2, 19283746, "Dr. Pato Lucas", "Medicina General", "03/05/2022", "10:20", 20, "Disponible", null)
-const cupo3=new Cupos(3, 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "10:40", 20, "Disponible", null)
-const cupo4=new Cupos(4, 19283746, "Dr. Pato Lucas", "Medicina General", "03/05/2022", "11:00", 20, "Disponible", null)
-const cupo5=new Cupos(5, 12345678, "Dr. Juan Perez", "Medicina General", "03/05/2022", "11:20", 20, "Disponible", null)
-const cupo6=new Cupos(6, 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "11:40", 20, "Disponible", null)
-const cupo7=new Cupos(7, 91827364, "Dr. Bugs Bunny", "Pediatría", "03/05/2022", "12:00", 20, "Disponible", null)
-const cupo8=new Cupos(8, 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "12:20", 20, "Disponible", null)
-const cupo9=new Cupos(9, 91827364, "Dr. Bugs Bunny", "Pediatría", "03/05/2022", "12:40", 20, "Disponible", null)
-const cupo10=new Cupos(10, 87654321, "Dr. Pepe Grillo", "Pediatría", "03/05/2022", "13:00", 20, "Disponible", null)
-
-let agenda=[cupo1, cupo2, cupo3, cupo4, cupo5, cupo6, cupo7, cupo8, cupo9, cupo10]
+//Agregar codigo fetch para crear arreglo "agenda" //no me funcionó :(
+let agenda = []
+fetch('cupos.json')
+.then(response => response.json())
+.then(productos => {
+    productos.forEach(producto => {
+        agenda.push(producto) 
+    });
+})
 
 //Para este caso se utilizará LocalStorage como reemplazo de una base de datos
 let arrayPacienteStorage = JSON.parse(localStorage.getItem('pacienteStorage')) ?? []
-let arrayAgendaStorage = JSON.parse(localStorage.getItem('agendaStorage')) ?? [...agenda]
+let arrayAgendaStorage = localStorage.getItem('agendaStorage') ?? [...agenda]
 
 let dni
 let nombre
