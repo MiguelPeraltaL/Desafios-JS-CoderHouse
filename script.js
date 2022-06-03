@@ -10,19 +10,20 @@ class Pacientes{
     }
 }
 
-//Agregar codigo fetch para crear arreglo "agenda" //no me funcionó :(
-let agenda = []
-fetch('cupos.json')
-.then(response => response.json())
-.then(productos => {
-    productos.forEach(producto => {
-        agenda.push(producto) 
-    });
-})
-
 //Para este caso se utilizará LocalStorage como reemplazo de una base de datos
 let arrayPacienteStorage = JSON.parse(localStorage.getItem('pacienteStorage')) ?? []
-let arrayAgendaStorage = localStorage.getItem('agendaStorage') ?? [...agenda]
+//let arrayAgendaStorage = localStorage.getItem('agendaStorage') ?? [...agenda]
+let arrayAgendaStorage = JSON.parse(localStorage.getItem('agendaStorage'))
+
+if(arrayAgendaStorage == null){
+    fetch('cupos.json')
+    .then(response => response.json())
+    .then(object => {
+        object.forEach(obj => {
+            arrayAgendaStorage.push(obj) 
+        });
+    })
+}
 
 let dni
 let nombre
@@ -78,7 +79,6 @@ function crearPaciente(dni){
 }
 
 let especialidad
-let arreglo
 function dispo(edadPac){
     if(edadPac>=14){
         especialidad = "Medicina General"
@@ -115,7 +115,6 @@ function dispo(edadPac){
     arrayAgendaStorage.forEach((item, indice) => {
         if(item.especialidad == especialidad && item.estado == "Disponible"){
             document.querySelector(`#boton${indice}`).addEventListener('click', () => {
-                //arrayAgendaStorage[indice].crearCita(dni)
                 arrayAgendaStorage[indice].estado="Ocupado"
                 arrayAgendaStorage[indice].dniPaciente=dni
                 localStorage.setItem('agendaStorage', JSON.stringify(arrayAgendaStorage))
